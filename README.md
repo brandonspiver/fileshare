@@ -11,16 +11,10 @@ presence and messaging, while clients send files directly to each other over UDP
 
 ### Requirements
 - Java 8+ (JDK recommended for compiling)
-- A `files/` directory next to `client.java` for shared files
+- Put any shared files in the tracked `files/` directory
 
 ### Setup
-1. Create a local folder for files:
-
-   ```powershell
-   mkdir files
-   ```
-
-2. Compile:
+1. Compile:
 
    ```powershell
    javac Server.java client.java
@@ -55,3 +49,4 @@ presence and messaging, while clients send files directly to each other over UDP
 - Each client must choose a unique username at startup.
 - `client_port` is the UDP port used for file transfers; use a free port per client.
 - Files are sent from the local `files/` directory only.
+- Compiled `.class` files and local `files/` contents are ignored by Git.
