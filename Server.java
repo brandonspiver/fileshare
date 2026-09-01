@@ -1,5 +1,5 @@
 /*
- * This is a 2 java file program (serve and Client) that uses Socket Programming; TCP for sygnalling
+ * This is a two-file Java program that uses socket programming: TCP for signaling
  * and messaging and UDP for file transfer
  * 
  * 	@author: Brandon Spiver
@@ -10,8 +10,8 @@ import java.io.*;
 import java.util.*;
 
 /*
- * Server class that allows multiple client to communicate with each other.
- * Allowing for the Peer to Peer file sharing via TCP
+ * Server class that allows multiple clients to communicate with each other.
+ * Allows peer-to-peer file sharing via TCP coordination.
  */
 public class Server {
 
@@ -40,7 +40,7 @@ public class Server {
 				System.out.println("Server started");
 				break;
 			} catch (Exception e) {
-				System.out.println("Port not available or invalid port,\nRun with java server <port>");
+				System.out.println("Port not available or invalid port,\nRun with java Server <port>");
 				System.exit(0);
 			}
 		}
@@ -102,7 +102,7 @@ class ClientManager implements Runnable {
 			this.nickname = br.readLine();
 
 			System.out.println("Client with nickname: " + nickname +
-					", addrees: " + s.getInetAddress().getHostAddress() + ", port: " + s.getPort()
+					", address: " + s.getInetAddress().getHostAddress() + ", port: " + s.getPort()
 					+ " and local port:" + s.getLocalPort());
 
 			Boolean taken = false;
@@ -116,15 +116,13 @@ class ClientManager implements Runnable {
 			if (taken) {
 				sendToClient(bw, "TAKEN");
 				Thread.sleep(100);
-				makeCloseUnsuccesful(s, br, bw);
+				makeCloseUnsuccessful(s, br, bw);
 			} else {
 				String clientsString = "ONLINE_USERS";
 				for (ClientManager client_ : clients) {
 					clientsString = clientsString + "|" + client_.nickname;
 				}
 				sendToClient(bw, clientsString);
-
-				System.out.println("Debugging");
 
 				for (ClientManager client_ : clients) {
 					sendToClient(client_.bw, "CLIENT_JOIN|" + nickname);
@@ -146,7 +144,7 @@ class ClientManager implements Runnable {
 	 */
 	@Override
 	public void run() {
-		String msg; // messaage received from a client
+		String msg; // message received from a client
 		while (s.isConnected()) {
 			try {
 				msg = br.readLine();
@@ -179,12 +177,12 @@ class ClientManager implements Runnable {
 				}
 				break;
 			case "WHISPER":
-				String wisperee = parts[1];
-				String wisper = parts[2];
+				String whisperee = parts[1];
+				String whisper = parts[2];
 				for (ClientManager client_ : clients) {
-					if (client_.nickname.equals(wisperee)) {
+					if (client_.nickname.equals(whisperee)) {
 						sendToClient(client_.bw, "WHISPER|" + nickname +
-								"|" + wisper);
+								"|" + whisper);
 					}
 				}
 				break;
@@ -295,7 +293,7 @@ class ClientManager implements Runnable {
 	 * @param br the BufferedReader associated with the client connection
 	 * @param bw the BufferedWriter associated with the client connection
 	 */
-	public void makeCloseUnsuccesful(Socket s, BufferedReader br, BufferedWriter bw) {
+	public void makeCloseUnsuccessful(Socket s, BufferedReader br, BufferedWriter bw) {
 		clients.remove(this);
 		System.out.println("Client failed to join");
 		try {

@@ -17,7 +17,7 @@ presence and messaging, while clients send files directly to each other over UDP
 1. Compile:
 
    ```powershell
-   javac Server.java client.java
+   javac Server.java Client.java
    ```
 
 ### Run
@@ -36,13 +36,13 @@ presence and messaging, while clients send files directly to each other over UDP
 2. Start one or more clients (in new terminals):
 
    ```powershell
-   java client <server_address> <server_port> <client_port>
+   java Client <server_address> <server_port> <client_port>
    ```
 
    Example:
 
    ```powershell
-   java client 127.0.0.1 5555 6001
+   java Client 127.0.0.1 5555 6001
    ```
 
 ### Notes
@@ -50,3 +50,8 @@ presence and messaging, while clients send files directly to each other over UDP
 - `client_port` is the UDP port used for file transfers; use a free port per client.
 - Files are sent from the local `files/` directory only.
 - Compiled `.class` files and local `files/` contents are ignored by Git.
+
+### Limitations
+- Intended as a local-network demo, not production-ready file sharing.
+- No user authentication, encryption, or access control is implemented.
+- File-transfer reliability is handled with a simple custom UDP acknowledgement flow.

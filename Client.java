@@ -11,8 +11,8 @@ import java.lang.Math;
 //-allow multiple users to send and receive at the same time
 
 //NEED TO CHECK:
-//-client can leave while sending/receiveing
-public class client extends JFrame implements ActionListener {
+//-client can leave while sending/receiving
+public class Client extends JFrame implements ActionListener {
 
 	public volatile ArrayList<String> clients = new ArrayList<>();
 
@@ -35,7 +35,7 @@ public class client extends JFrame implements ActionListener {
 	private static int serverPort;
 	private static int receiverPort;
 	private static String randomKey;
-	public static volatile Boolean receiveing = false;
+	public static volatile Boolean receiving = false;
 	public static volatile Boolean pause = false;
 	public static volatile int valueprogress;
 	public JScrollPane scrollPane;
@@ -50,8 +50,8 @@ public class client extends JFrame implements ActionListener {
 			serverPort = Integer.parseInt(args[1]);
 			receiverPort = Integer.parseInt(args[2]);
 		} catch (Exception e) {
-			System.out.println("Client failed!\nPlease run client with:\n" +
-					"java client <server address> <server port> <client port>, see README.md for more information");
+			System.out.println("Client failed!\nPlease run Client with:\n" +
+					"java Client <server address> <server port> <client port>, see README.md for more information");
 			System.exit(0);
 		}
 
@@ -62,7 +62,7 @@ public class client extends JFrame implements ActionListener {
 
 		try {
 			Socket s = new Socket(serverAddress, serverPort);
-			client c = new client(s, nickname);
+			Client c = new Client(s, nickname);
 			c.messagesFromServer();
 			c.sendNickname();
 			c.receiver();
@@ -104,13 +104,12 @@ public class client extends JFrame implements ActionListener {
 										" whisper to.",
 								"Whisper",
 								JOptionPane.INFORMATION_MESSAGE);
-						if (clients.contains(whisperee) || whisperee.equals(
-								null))
+						if (whisperee == null || clients.contains(whisperee))
 							break;
 						else
 							JOptionPane.showMessageDialog(this,
 									"The nickname you entered does " +
-											"not exits.",
+											"not exist.",
 									whisperee + " does not exist",
 									JOptionPane.ERROR_MESSAGE);
 					}
@@ -142,7 +141,7 @@ public class client extends JFrame implements ActionListener {
 							+ "|" + randomKey + "|" + receiverPort);
 				} else {
 					JOptionPane.showMessageDialog(this,
-							"The username you entered does not exits.",
+							"The username you entered does not exist.",
 							targetNickname + " does not exist",
 							JOptionPane.ERROR_MESSAGE);
 				}
@@ -156,7 +155,7 @@ public class client extends JFrame implements ActionListener {
 				}
 			}
 		} catch (Exception ex) {
-			System.out.println("Server dsconnected");
+			System.out.println("Server disconnected");
 			makeClose(s, br, bw);
 		}
 	}
@@ -173,7 +172,7 @@ public class client extends JFrame implements ActionListener {
 		}
 	}
 
-	public client(Socket s, String nickname) {
+	public Client(Socket s, String nickname) {
 		try {
 
 			this.s = s;
@@ -293,12 +292,11 @@ public class client extends JFrame implements ActionListener {
 				while (s.isConnected()) {
 					try {
 						msg = br.readLine();
-						System.out.println("Line fron server: " + msg);
+						System.out.println("Line from server: " + msg);
 						processCommand(msg);
 						updateClientListGUI();
 						updateFileList();
 					} catch (IOException e) {
-						// TODO Auto-generated catch block
 						makeClose(s, br, bw);
 					}
 				}
@@ -608,7 +606,7 @@ public class client extends JFrame implements ActionListener {
 							ds.send(acknowledgement);
 						} else {
 							System.out.println(
-									"Did not get sequennce Number"
+									"Did not get sequence number "
 											+ (prevSqNumber + 1) + " but got "
 											+ sqNumber);
 
@@ -714,7 +712,6 @@ public class client extends JFrame implements ActionListener {
 								Thread.sleep(0);
 
 							} catch (Exception e) {
-								// TODO: handle exception
 							}
 						}
 					});
